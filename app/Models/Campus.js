@@ -11,6 +11,9 @@ class Campus extends Model {
     equipament () {
         return this.hasOne('App/Models/Equipament')
     }
+    user () {
+        return this.hasOne('App/Models/User')
+    }
 }
 
 module.exports = Campus
