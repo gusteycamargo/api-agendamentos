@@ -10,90 +10,70 @@ const Campus = use('App/Models/Campus');
  * Resourceful controller for interacting with campuses
  */
 class CampusController {
-  /**
-   * Show a list of all campuses.
-   * GET campuses
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+
+  async index ({ request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const campus = await Campus.all();
+
+      return campus;
+    }
+    else {
+      return response.status(401).send('Área não autorizada');
+    }
   }
 
-  /**
-   * Render a form to be used for creating a new campus.
-   * GET campuses/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const data = request.only(['city', 'adress', 'status']);
+
+      const campus = await Campus.create(data);
+  
+      return campus;
+    }
+    else {
+      return response.status(401).send('Área não autorizada');
+    }  
+    
   }
 
-  /**
-   * Create/save a new campus.
-   * POST campuses
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-    const data = request.only(['city', 'adress', 'status']);
+  async show ({ params, request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const campus = await Campus.findOrFail(params.id);
 
-    const campus = await Campus.create(data);
-
-    return campus;
+      return campus;
+    }
+    else {
+      return response.status(401).send('Área não autorizada');
+    }
   }
 
-  /**
-   * Display a single campus.
-   * GET campuses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const campus = await Campus.findOrFail(params.id);
+      const data = request.only(["city", "adress", "status"]);
+
+      await campus.merge(data);
+      await campus.save();
+
+      return campus;
+    }
+    else {
+      return response.status(401).send('Área não autorizada');
+    }
   }
 
-  /**
-   * Render a form to update an existing campus.
-   * GET campuses/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params, request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const campus = await Campus.findOrFail(params.id);
 
-  /**
-   * Update campus details.
-   * PUT or PATCH campuses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+      await campus.merge({ status: 'Inativo'});
+      await campus.save();
 
-  /**
-   * Delete a campus with id.
-   * DELETE campuses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+      return campus;
+    }
+    else {
+      return response.status(401).send('Área não autorizada');
+    }
   }
 }
 
