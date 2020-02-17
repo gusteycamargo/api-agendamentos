@@ -14,7 +14,7 @@ class UserController {
       return users;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     } 
   }
 
@@ -36,7 +36,7 @@ class UserController {
       return user;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     } 
   }
 
@@ -53,7 +53,7 @@ class UserController {
       return user;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     } 
   }
 
@@ -69,7 +69,7 @@ class UserController {
       return user;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     } 
   }
 

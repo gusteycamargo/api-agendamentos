@@ -18,7 +18,7 @@ class CampusController {
       return campus;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
   }
 
@@ -31,7 +31,7 @@ class CampusController {
       return campus;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }  
     
   }
@@ -43,7 +43,7 @@ class CampusController {
       return campus;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
   }
 
@@ -58,7 +58,7 @@ class CampusController {
       return campus;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
   }
 
@@ -72,7 +72,7 @@ class CampusController {
       return campus;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
   }
 }

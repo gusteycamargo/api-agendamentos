@@ -1,5 +1,7 @@
 'use strict'
 
+const Course = use('App/Models/Course');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,76 +19,77 @@ class CourseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ auth, request, response, view }) {
+    if(auth.user.function === 'adm') {
+      const courses = await Course.query().with('campus').fetch();
+      //await equipaments.load('campus');
+  
+      return courses;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
   }
 
-  /**
-   * Render a form to be used for creating a new course.
-   * GET courses/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ auth, request, response }) {
+    if(auth.user.function === 'adm') {
+      const data = request.only(['campus_id', 'name', 'status']);
+
+      const course = await Course.create(data);
+      await course.load('campus');
+
+      return course;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }  
   }
 
-  /**
-   * Create/save a new course.
-   * POST courses
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ auth, params, request, response, view }) {
+    if(auth.user.function === 'adm') {
+      const course = await Course.findOrFail(params.id);
+      await course.load('campus');
+  
+      return course;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }  
   }
 
-  /**
-   * Display a single course.
-   * GET courses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, auth, request, response }) {
+    if(auth.user.function === 'adm') {
+      let course = await Course.findOrFail(params.id);
+      const data = request.only(["campus_id", "name", "status"]);
+
+      await course.merge(data);
+      await course.save();
+
+      return {
+        status: 'ok'
+      }
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
   }
 
-  /**
-   * Render a form to update an existing course.
-   * GET courses/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let course = await Course.findOrFail(params.id);
+      
+      await course.merge({status: 'Inativo'});
+      await course.save();
 
-  /**
-   * Update course details.
-   * PUT or PATCH courses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a course with id.
-   * DELETE courses/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+      return {
+        status: 'ok'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
   }
 }
 

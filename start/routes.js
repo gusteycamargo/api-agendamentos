@@ -18,9 +18,12 @@ const Route = use('Route')
 
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
-})
+});
 
+Route.resource('courses', 'CourseController').apiOnly().middleware('auth');
+Route.resource('categories', 'CategoryController').apiOnly().middleware('auth');
 Route.resource('users', 'UserController').apiOnly().middleware('auth');
 Route.resource('campuses', 'CampusController').apiOnly().middleware('auth');
 Route.resource('equipaments', 'EquipamentController').apiOnly().middleware('auth');
+Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
 Route.post('/sessions', 'SessionController.create');

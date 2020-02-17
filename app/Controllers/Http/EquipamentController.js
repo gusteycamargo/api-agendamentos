@@ -19,7 +19,7 @@ class EquipamentController {
       return equipaments;
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     } 
   }
 
@@ -40,7 +40,7 @@ class EquipamentController {
       }
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }  
   }
 
@@ -59,55 +59,41 @@ class EquipamentController {
       }
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }  
   }
 
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
-      try {
-        let equipament = await Equipament.findOrFail(params.id);
-        const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
+      let equipament = await Equipament.findOrFail(params.id);
+      const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
 
-        await equipament.merge(data);
-        await equipament.save();
+      await equipament.merge(data);
+      await equipament.save();
 
-        return {
-          status: 'equipamento alterado com sucesso'
-        };
-      }
-      catch (error) {
-        return {
-          error: 'equipamento não encontrado'
-        };
+      return {
+        status: 'equipamento alterado com sucesso'
       }
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
   }
 
   async destroy ({ params, auth, request, response }) {
    
     if(auth.user.function === 'adm') {
-      try {
-        let equipament = await Equipament.findOrFail(params.id);
-        
-        await equipament.merge({status: 'Inativo'});
-        await equipament.save();
+      let equipament = await Equipament.findOrFail(params.id);
+      
+      await equipament.merge({status: 'Inativo'});
+      await equipament.save();
 
-        return {
-          status: 'equipamento deletado com sucesso'
-        };
-      }
-      catch (error) {
-        return {
-          error: 'equipamento não encontrado'
-        };
+      return {
+        status: 'equipamento deletado com sucesso'
       }
     }
     else {
-      return response.status(401).send('Área não autorizada');
+      return response.status(403).send('Área não autorizada');
     }
     
   }

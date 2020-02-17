@@ -1,5 +1,7 @@
 'use strict'
 
+const Place = use('App/Models/Place');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,76 +19,77 @@ class PlaceController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ auth, request, response, view }) {
+    if(auth.user.function === 'adm') {
+      const places = await Place.query().with('campus').fetch();
+      //await equipaments.load('campus');
+  
+      return places;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
   }
 
-  /**
-   * Render a form to be used for creating a new place.
-   * GET places/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ auth, request, response }) {
+    if(auth.user.function === 'adm') {
+      const data = request.only(['campus_id', 'name', 'capacity', 'status']);
+
+        const place = await Place.create(data);
+        await place.load('campus');
+  
+        return place;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }  
   }
 
-  /**
-   * Create/save a new place.
-   * POST places
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ auth, params, request, response, view }) {
+    if(auth.user.function === 'adm') {
+      const place = await Place.findOrFail(params.id);
+      await place.load('campus');
+  
+      return place;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }  
   }
 
-  /**
-   * Display a single place.
-   * GET places/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, auth, request, response }) {
+    if(auth.user.function === 'adm') {
+      let place = await Place.findOrFail(params.id);
+      const data = request.only(["campus_id", "name", 'capacity', "status"]);
+
+      await place.merge(data);
+      await place.save();
+
+      return {
+        status: 'ok'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
   }
 
-  /**
-   * Render a form to update an existing place.
-   * GET places/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let place = await Place.findOrFail(params.id);
+      
+      await place.merge({status: 'Inativo'});
+      await place.save();
 
-  /**
-   * Update place details.
-   * PUT or PATCH places/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a place with id.
-   * DELETE places/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+      return {
+        status: 'ok'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
   }
 }
 
