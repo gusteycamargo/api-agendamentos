@@ -5,7 +5,7 @@ const Schema = use('Schema')
 
 class ScheduleEquipamentSchema extends Schema {
   up () {
-    this.create('schedule_equipament', (table) => {
+    this.create('equipament_schedule', (table) => {
       table.increments()
       table
         .integer('schedule_id')
@@ -28,7 +28,7 @@ class ScheduleEquipamentSchema extends Schema {
   }
 
   down () {
-    this.drop('schedule_equipaments')
+    this.drop('equipament_schedule')
   }
 }
 

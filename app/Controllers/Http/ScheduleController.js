@@ -1,5 +1,7 @@
 'use strict'
 
+const Schedule = use('App/Models/Schedule');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -41,6 +43,28 @@ class ScheduleController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    const { equipaments, ...data } = request.only([
+      'place_id', 
+      'category_id', 
+      'course_id', 
+      'registration_user_id', 
+      'requesting_user_id', 
+      'campus_id', 
+      'comments',
+      'date',
+      'initial',
+      'final',
+      'equipaments'
+    ]);
+
+    const schedule = await Schedule.create(data);
+
+    if(equipaments) {
+      await schedule.equipaments().attach(equipaments);
+      await schedule.load('equipaments');
+
+      return schedule;
+    }
   }
 
   /**

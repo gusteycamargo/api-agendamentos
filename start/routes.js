@@ -26,4 +26,6 @@ Route.resource('users', 'UserController').apiOnly().middleware('auth');
 Route.resource('campuses', 'CampusController').apiOnly().middleware('auth');
 Route.resource('equipaments', 'EquipamentController').apiOnly().middleware('auth');
 Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
+Route.resource('/schedules', 'ScheduleController').apiOnly().middleware('auth');
 Route.post('/sessions', 'SessionController.create');
+Route.get('/teste', 'AvailabilityController.index');
