@@ -7,6 +7,9 @@ class Schedule extends Model {
     equipaments() {
         return this.belongsToMany('App/Models/Equipament');
     }
+    place() {
+        return this.belongsTo('App/Models/Place');
+    }
 }
 
 module.exports = Schedule
