@@ -20,6 +20,9 @@ class Campus extends Model {
     user () {
         return this.hasOne('App/Models/User')
     }
+    schedule() {
+        return this.hasOne('App/Models/Schedule');
+    }
 }
 
 module.exports = Campus

@@ -19,7 +19,31 @@ class ScheduleController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, auth, response, view }) {
+    let schedules = [];
+    
+    if(auth.user.function === 'adm') {
+      schedules = await Schedule.query().with('place')
+        .with('requesting_user')
+        .with('registration_user')
+        .with('equipaments')
+        .with('category')
+        .with('course')
+        .with('campus')
+        .fetch();
+    }
+    else {
+      schedules = await Schedule.query().whereRaw('requesting_user_id = ?', [auth.user.id]).with('place')
+        .with('requesting_user')
+        .with('registration_user')
+        .with('equipaments')
+        .with('category')
+        .with('course')
+        .with('campus')
+        .fetch();
+    }
+
+    return schedules;
   }
 
   /**

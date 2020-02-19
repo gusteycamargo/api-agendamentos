@@ -7,6 +7,9 @@ class Course extends Model {
     campus() {
         return this.belongsTo('App/Models/Campus');
     }
+    schedule() {
+        return this.hasOne('App/Models/Schedule');
+    }
 }
 
 module.exports = Course
