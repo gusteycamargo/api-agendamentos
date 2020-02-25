@@ -29,4 +29,5 @@ Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
 Route.resource('/schedules', 'ScheduleController').apiOnly().middleware('auth');
 Route.get('/availability', 'AvailabilityController.index').middleware('auth');
 Route.get('/filter', 'FilterScheduleController.index').middleware('auth');
+Route.get('/userLogged', 'UserLoggedController.index').middleware('auth');
 Route.post('/sessions', 'SessionController.create');
