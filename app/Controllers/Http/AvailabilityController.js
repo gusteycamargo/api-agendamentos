@@ -6,11 +6,11 @@ const schedulesFiltered = use('App/utils/schedulesFiltered');
 
 class AvailabilityController {
     async index ({ request }) {
-        const data = request.only(['initial', 'final', 'date']);
+        const data = request.headers();
         const hourInitial = data.initial.split(":");
         const hourFinal = data.final.split(":");
         
-        const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal);
+        const schedulesData = await schedulesFiltered(data.date_a, hourInitial, hourFinal);
         const avaibilityEquipaments = await availableEquipaments(schedulesData);
         const avaibilityPlaces = await availablePlaces(schedulesData);
 
