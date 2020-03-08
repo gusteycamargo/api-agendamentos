@@ -6,6 +6,11 @@ module.exports = async function schedulesFiltered(date, hourInitial, hourFinal) 
     
     period = definePeriod(hourInitial, hourFinal);
     subPeriod = defineSubPeriod(hourInitial, hourFinal);
+
+    if(period === 0) {
+        return { error: 'Horário inválido'}
+    }
+
     const { classOne, classTwo } = defineClassHour(period, subPeriod);
     
     const schedulesData = await Schedule
