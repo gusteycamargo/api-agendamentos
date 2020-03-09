@@ -56,6 +56,7 @@ class SchedulesSchema extends Schema {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.string('comments', 350)
+      table.string('status')
       table.date('date').notNullable()
       table.time('initial').notNullable()
       table.time('final').notNullable()
