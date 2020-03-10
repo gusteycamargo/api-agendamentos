@@ -53,7 +53,8 @@ class ScheduleController {
       'date',
       'initial',
       'final',
-      'equipaments'
+      'equipaments',
+      'status'
     ]);
 
     const hourInitial = data.initial.split(":");
