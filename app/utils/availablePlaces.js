@@ -1,6 +1,6 @@
-module.exports = async function availablePlaces(schedulesData) {
+module.exports = async function availablePlaces(schedulesData, auth) {
     const Place = use('App/Models/Place');
-    const allPlaces = await Place.all().then( (places) => places.toJSON());
+    const allPlaces = await Place.query().whereRaw("campus_id = ?", [auth.user.campus_id]).fetch().then( (places) => places.toJSON());
 
     const activePlaces = allPlaces.filter((elem) => {
         return elem.status === 'Ativo';

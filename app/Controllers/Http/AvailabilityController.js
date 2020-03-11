@@ -5,7 +5,7 @@ const availablePlaces = use('App/utils/availablePlaces');
 const schedulesFiltered = use('App/utils/schedulesFiltered');
 
 class AvailabilityController {
-    async index ({ request, response }) {
+    async index ({ request, response, auth }) {
         const data = request.headers();
         const hourInitial = data.initial.split(":");
         const hourFinal = data.final.split(":");
@@ -16,8 +16,8 @@ class AvailabilityController {
             return response.status(418).send('Horário inválido');
         }
 
-        const avaibilityEquipaments = await availableEquipaments(schedulesData);
-        const avaibilityPlaces = await availablePlaces(schedulesData);
+        const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
+        const avaibilityPlaces = await availablePlaces(schedulesData, auth);
 
         return {
             avaibilityEquipaments,

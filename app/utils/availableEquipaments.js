@@ -1,6 +1,6 @@
-module.exports = async function availableEquipaments(schedulesData) {
+module.exports = async function availableEquipaments(schedulesData, auth) {
     const Equipament = use('App/Models/Equipament');
-    const allEquipaments = await Equipament.all().then( (equipaments) => equipaments.toJSON());
+    const allEquipaments = await Equipament.query().whereRaw("campus_id = ?", [auth.user.campus_id]).fetch().then( (equipaments) => equipaments.toJSON());
 
     const activeEquipaments = allEquipaments.filter((elem) => {
         return elem.status === 'Ativo';
