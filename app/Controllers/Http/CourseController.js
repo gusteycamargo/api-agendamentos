@@ -21,7 +21,7 @@ class CourseController {
    */
   async index ({ auth, request, response, view }) {
     if(auth.user.function === 'adm') {
-      const courses = await Course.query().with('campus').fetch();
+      const courses = await Course.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
       //await equipaments.load('campus');
   
       return courses;

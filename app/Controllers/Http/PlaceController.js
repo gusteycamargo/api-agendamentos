@@ -21,7 +21,7 @@ class PlaceController {
    */
   async index ({ auth, request, response, view }) {
     if(auth.user.function === 'adm') {
-      const places = await Place.query().with('campus').fetch();
+      const places = await Place.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
       //await equipaments.load('campus');
   
       return places;

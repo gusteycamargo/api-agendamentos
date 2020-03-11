@@ -7,7 +7,7 @@ class UserController {
 
   async index ({ auth, request, response, view }) {
     if(auth.user.function === 'adm') {
-      const users = await User.query().with('campus').fetch();
+      const users = await User.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
       //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
       //await equipaments.load('campus');
   
