@@ -5,8 +5,7 @@ const Model = use('Model')
 
 class Schedule extends Model {
     static get hidden () {
-        return ['place_id', 
-                'category_id', 
+        return ['category_id', 
                 'course_id',
                 'campus_id',
                 'registration_user_id',
