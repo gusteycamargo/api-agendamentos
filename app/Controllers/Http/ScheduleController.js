@@ -186,6 +186,7 @@ class ScheduleController {
     else {
       await schedule.merge(data);
       await schedule.save();
+      await schedule.equipaments().sync(equipaments);
       //const schedule = await Schedule.create(data);
       return schedule;
     }
