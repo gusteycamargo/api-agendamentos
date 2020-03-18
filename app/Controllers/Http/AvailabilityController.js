@@ -10,7 +10,7 @@ class AvailabilityController {
         const hourInitial = data.initial.split(":");
         const hourFinal = data.final.split(":");
         
-        const schedulesData = await schedulesFiltered(data.date_a, hourInitial, hourFinal);
+        const schedulesData = await schedulesFiltered(data.date_a, hourInitial, hourFinal, data.status);
 
         if(schedulesData.error) {
             return response.status(418).send('Horário inválido');

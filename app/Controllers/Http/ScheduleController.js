@@ -61,7 +61,7 @@ class ScheduleController {
     const hourInitial = data.initial.split(":");
     const hourFinal = data.final.split(":");
     
-    const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal);
+    const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal, data.status);
     const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
     const avaibilityPlaces = await availablePlaces(schedulesData, auth);
 
@@ -142,7 +142,7 @@ class ScheduleController {
     const hourInitial = data.initial.split(":");
     const hourFinal = data.final.split(":");
     
-    const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal);
+    const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal, data.status);
     const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
     const avaibilityPlaces = await availablePlaces(schedulesData, auth);
 
