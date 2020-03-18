@@ -103,6 +103,19 @@ class ScheduleController {
   }
 
   async show ({ params, request, response, view }) {
+    const schedule = await Schedule.findOrFail(params.id);
+    await schedule.load('place')
+    await schedule.load('requesting_user')
+    await schedule.load('registration_user')
+    await schedule.load('equipaments')
+    await schedule.load('category')
+    await schedule.load('course')
+    await schedule.load('campus');
+                  
+    //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
+    //await equipaments.load('campus');
+
+    return schedule;
   }
 
   async update ({ params, request, response , auth }) {
