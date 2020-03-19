@@ -193,6 +193,12 @@ class ScheduleController {
   }
 
   async destroy ({ params, request, response }) {
+    const schedule = await Schedule.findOrFail(params.id);
+
+    await schedule.merge({ status: 'Cancelado' });
+    await schedule.save();
+
+    return schedule;
   }
 }
 
