@@ -12,15 +12,15 @@ const Category = use('App/Models/Category')
 class CategoryController {
  
   async index ({ auth, request, response, view }) {
-    if(auth.user.function === 'adm') {
+    // if(auth.user.function === 'adm') {
       const categories = await Category.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
       //await equipaments.load('campus');
   
       return categories;
-    }
-    else {
-      return response.status(403).send('Área não autorizada');
-    } 
+    // }
+    // else {
+    //   return response.status(403).send('Área não autorizada');
+    // } 
   }
 
   async store ({ auth, request, response }) {

@@ -20,15 +20,15 @@ class CourseController {
    * @param {View} ctx.view
    */
   async index ({ auth, request, response, view }) {
-    if(auth.user.function === 'adm') {
+    // if(auth.user.function === 'adm') {
       const courses = await Course.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
       //await equipaments.load('campus');
   
       return courses;
-    }
-    else {
-      return response.status(403).send('Área não autorizada');
-    } 
+    // }
+    // else {
+    //   return response.status(403).send('Área não autorizada');
+    // } 
   }
 
   async store ({ auth, request, response }) {
