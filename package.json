@@ -28,7 +28,7 @@
     "kind-of": "^6.0.3",
     "knex": "^0.20.13",
     "mysql": "^2.18.1",
-    "set-value": "^3.0.2"
+    "set-value": "^2.0.1"
   },
   "devDependencies": {},
   "autoload": {
