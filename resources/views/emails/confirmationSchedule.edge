@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <style>
+            .warning {
+                color: #FF0000;
+                font-size: 16px;
+            }
+            .container {
+                margin: 0 auto;
+                justify-content: center;
+                align-items: center;
+            }
+            .text {
+                margin: 0;
+                margin-top: 10px;
+            }
+            .tp-20 {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Seu agendamento foi realizado com sucesso</h1>
+            
+            <p class="text">
+                Data: <strong>{{ date }}</strong>
+            </p>
+            <p class="text">
+                Horário de início: <strong>{{ schedule.initial }}</strong>
+            </p>
+            <p class="text">
+                Horário de término: <strong>{{ schedule.final }}</strong>
+            </p>
+            <p class="text">
+                Equipamentos: <strong>{{ equipamentsName }}</strong>
+            </p>
+            <p class="text">
+                Sala: <strong>{{ place.name }}</strong>
+            </p>
+            <p class="text">
+                Curso: <strong>{{ course.name }}</strong>
+            </p>
+            <p class="text">
+                Ano: <strong>{{ category.description }}</strong>
+            </p>
+            <p class="text">
+                Responsável: <strong>{{ user.fullname }}</strong>
+            </p>
+    
+            <hr class="tp-20">
+                <p>Em caso de dúvida, sugestões ou reclamações entre em contato com o setor de informática: <strong>informatica.paranagua@unespar.edu.br</strong></p>
+            <hr>
+    
+            <p class="warning">
+                Esta é uma mensagem automática. Por favor, não responda este e-mail.
+            </p>
+        </div>
+    </body>
+</html>
+

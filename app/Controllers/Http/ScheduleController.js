@@ -2,9 +2,11 @@
 
 const Database = use('Database');
 const Schedule = use('App/Models/Schedule');
+const Mail = use('Mail');
 const availableEquipaments = use('App/utils/availableEquipaments');
 const availablePlaces = use('App/utils/availablePlaces');
 const schedulesFiltered = use('App/utils/schedulesFiltered');
+const retrieveDataToEmailConfirmation = use('App/utils/retrieveDataToEmailConfirmation');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -86,7 +88,16 @@ class ScheduleController {
         if(equipaments) {
           await schedule.equipaments().attach(equipaments);
           await schedule.load('equipaments');
-  
+
+          const { user, place, course, category, equipamentsName, date } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+
+          await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+            message
+                .from('donotreplyagendamento@unespar.edu.br')
+                .to('camargo25.gustavo@gmail.com')
+                .subject('Confirmação de agendamento')
+          });
+
           return schedule;
         }
       }
