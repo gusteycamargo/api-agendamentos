@@ -13,8 +13,6 @@ module.exports = async function retrieveDataToEmailConfirmation(equipaments, sch
     const category = await Category.findOrFail(schedule.category_id);
     const date = formatDate(schedule.date);
     let equipamentsName = [];
-
-    console.log(equipaments.length);
     
     if(equipaments.length > 0) {
       for (const equipament of equipaments) {            
