@@ -6,6 +6,7 @@ module.exports = async function retrieveDataToEmailConfirmation(equipaments, sch
     const Category = use('App/Models/Category');
     const formatDate = use('App/utils/formatDate');
 
+    const addressee = await User.findOrFail(schedule.requesting_user_id);
     const user = await User.findOrFail(schedule.registration_user_id);
     const place = await Place.findOrFail(schedule.place_id);
     const course = await Course.findOrFail(schedule.course_id);
@@ -18,5 +19,5 @@ module.exports = async function retrieveDataToEmailConfirmation(equipaments, sch
       equipamentsName.push(" "+equip.name);
     }
 
-    return { user, place, course, category, equipamentsName, date };
+    return { user, place, course, category, equipamentsName, date, addressee };
 }

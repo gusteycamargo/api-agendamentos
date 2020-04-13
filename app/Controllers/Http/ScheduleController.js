@@ -89,12 +89,12 @@ class ScheduleController {
           await schedule.equipaments().attach(equipaments);
           await schedule.load('equipaments');
 
-          const { user, place, course, category, equipamentsName, date } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+          const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
 
           await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
             message
                 .from('donotreplyagendamento@unespar.edu.br')
-                .to('camargo25.gustavo@gmail.com')
+                .to(addressee.email)
                 .subject('Confirmação de agendamento')
           });
 
