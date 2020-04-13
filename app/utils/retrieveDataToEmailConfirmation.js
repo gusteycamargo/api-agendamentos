@@ -12,11 +12,18 @@ module.exports = async function retrieveDataToEmailConfirmation(equipaments, sch
     const course = await Course.findOrFail(schedule.course_id);
     const category = await Category.findOrFail(schedule.category_id);
     const date = formatDate(schedule.date);
-    const equipamentsName = [];
+    let equipamentsName = [];
 
-    for (const equipament of equipaments) {            
-      let equip = await Equipament.findOrFail(equipament);
-      equipamentsName.push(" "+equip.name);
+    console.log(equipaments.length);
+    
+    if(equipaments.length > 0) {
+      for (const equipament of equipaments) {            
+        let equip = await Equipament.findOrFail(equipament);
+        equipamentsName.push(" "+equip.name);
+      }
+    }
+    else {
+      equipamentsName = "Sem equipamentos";
     }
 
     return { user, place, course, category, equipamentsName, date, addressee };

@@ -90,7 +90,7 @@ class ScheduleController {
           await schedule.load('equipaments');
 
           const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
-
+          
           await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
             message
                 .from('donotreplyagendamento@unespar.edu.br')
@@ -109,6 +109,15 @@ class ScheduleController {
     }
     else {
       const schedule = await Schedule.create(data);
+      const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+
+      await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+        message
+            .from('donotreplyagendamento@unespar.edu.br')
+            .to(addressee.email)
+            .subject('Confirmação de agendamento')
+      });
+
       return schedule;
     }
   }
