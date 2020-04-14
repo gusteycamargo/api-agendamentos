@@ -59,7 +59,7 @@ class ScheduleController {
     const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
     const avaibilityPlaces = await availablePlaces(schedulesData, auth);
     
-    if(dateIsAtTheLimit(data.date)) {
+    if(dateIsAtTheLimit(data.date) || auth.user.function === 'adm') {
       const equipamentsVerify = avaibilityEquipaments.filter((equipament) => {
         return equipaments.includes(equipament.id);
       });
@@ -69,9 +69,7 @@ class ScheduleController {
       });
 
       if(placeVerify.length === 0) {
-        return {
-          error: "A sala solicitada não está disponível"
-        }
+        return response.status(400).send({ error: "A sala solicitada não está disponível" });
       }
 
       if(equipaments.length !== 0) {
@@ -95,9 +93,7 @@ class ScheduleController {
           }
         }
         else {
-          return {
-            error: "Os equipamentos selecionados não estão disponíveis"
-          }
+          return response.status(400).send({ error: "Os equipamentos selecionados não estão disponíveis" });
         }
       }
       else {
@@ -163,49 +159,66 @@ class ScheduleController {
     const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
     const avaibilityPlaces = await availablePlaces(schedulesData, auth);
 
-    const equipamentsVerify = avaibilityEquipaments.filter((equipament) => {
-      return equipaments.includes(equipament.id);
-    });
+    if(dateIsAtTheLimit(data.date) || auth.user.function === 'adm') {
+      const equipamentsVerify = avaibilityEquipaments.filter((equipament) => {
+        return equipaments.includes(equipament.id);
+      });
 
-    const placeVerify = avaibilityPlaces.filter((place) => {
-      return data.place_id === place.id;
-    });
+      const placeVerify = avaibilityPlaces.filter((place) => {
+        return data.place_id === place.id;
+      });
 
-    if(placeVerify.length === 0) {      
-      if(schedule.place_id !== data.place_id){
-        return {
-          "error": "entrada inválida"
+      if(placeVerify.length === 0) {      
+        if(schedule.place_id !== data.place_id){
+          return response.status(400).send({ error: "A sala solicitada não está disponível" });
         }
       }
-    }
 
-    if(equipaments.length !== 0) {
-      if(equipamentsVerify.length === equipaments.length || ((equipaments.length === equipamentsInSchdeule.length) || (equipaments.length < equipamentsInSchdeule.length))) {
-        await schedule.merge(data);
-        await schedule.save();
+      if(equipaments.length !== 0) {
+        if(equipamentsVerify.length === equipaments.length || ((equipaments.length === equipamentsInSchdeule.length) || (equipaments.length < equipamentsInSchdeule.length))) {
+          await schedule.merge(data);
+          await schedule.save();
 
-  
-        if(equipaments) {
-          await schedule.equipaments().sync(equipaments)
-          //await schedule.equipaments().attach(equipaments);
+    
+          if(equipaments) {
+            await schedule.equipaments().sync(equipaments)
+            await schedule.load('equipaments');
 
-          await schedule.load('equipaments');
-  
-          return schedule;
+            const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+            
+            await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+              message
+                  .from('donotreplyagendamento@unespar.edu.br')
+                  .to(addressee.email)
+                  .subject('Edição de agendamento')
+            });
+    
+            return schedule;
+          }
+        }
+        else {
+          return response.status(400).send({ error: "Os equipamentos selecionados não estão disponíveis" });
         }
       }
       else {
-        return {
-          "error": "entrada inválida"
-        }
+        await schedule.merge(data);
+        await schedule.save();
+        await schedule.equipaments().sync(equipaments);
+        
+        const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+
+        await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+          message
+              .from('donotreplyagendamento@unespar.edu.br')
+              .to(addressee.email)
+              .subject('Edição de agendamento')
+        });
+
+        return schedule;
       }
     }
     else {
-      await schedule.merge(data);
-      await schedule.save();
-      await schedule.equipaments().sync(equipaments);
-      //const schedule = await Schedule.create(data);
-      return schedule;
+      return { error: "A data inserida não está dentro dos 15 dias limite" }
     }
   }
 

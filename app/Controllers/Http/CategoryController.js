@@ -13,7 +13,7 @@ class CategoryController {
  
   async index ({ auth, request, response, view }) {
     // if(auth.user.function === 'adm') {
-      const categories = await Category.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
+      const categories = await Category.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').orderBy('description', 'cres').fetch();
       //await equipaments.load('campus');
   
       return categories;

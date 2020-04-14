@@ -13,7 +13,7 @@ class EquipamentController {
 
   async index ({ auth, request, response, view }) {
     if(auth.user.function === 'adm') {
-      const equipaments = await Equipament.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').fetch();
+      const equipaments = await Equipament.query().whereRaw("campus_id = ?", [auth.user.campus_id]).orderBy('name', 'cres').with('campus').fetch();
       //await equipaments.load('campus');
   
       return equipaments;

@@ -56,6 +56,7 @@ class FilterScheduleController {
         else {
           schedules = await Schedule.query().whereRaw('(requesting_user_id = ?) and date = ? and (initial between ? and ?) and (final between ? and ?)', 
                 [auth.user.id, data.date_a, periodHour.initial1, periodHour.initial2, periodHour.final1, periodHour.final2])
+            .orderBy('initial', 'cres')
             .with('place')
             .with('requesting_user')
             .with('registration_user')

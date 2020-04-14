@@ -13,7 +13,7 @@ class CampusController {
 
   async index ({ request, response, auth }) {
     if(auth.user.function === 'adm') {
-      const campus = await Campus.all();
+      const campus = await Campus.query().orderBy('city', 'cres').fetch();
 
       return campus;
     }
