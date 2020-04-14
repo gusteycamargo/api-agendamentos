@@ -7,6 +7,7 @@ const availableEquipaments = use('App/utils/availableEquipaments');
 const availablePlaces = use('App/utils/availablePlaces');
 const schedulesFiltered = use('App/utils/schedulesFiltered');
 const retrieveDataToEmailConfirmation = use('App/utils/retrieveDataToEmailConfirmation');
+const dateIsAtTheLimit = use('App/utils/dateIsAtTheLimit');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -46,18 +47,9 @@ class ScheduleController {
 
   async store ({ request, response, auth }) {
     const { equipaments, ...data } = request.only([
-      'place_id', 
-      'category_id', 
-      'course_id', 
-      'registration_user_id', 
-      'requesting_user_id', 
-      'campus_id', 
-      'comments',
-      'date',
-      'initial',
-      'final',
-      'equipaments',
-      'status'
+      'place_id', 'category_id', 'course_id', 'registration_user_id', 
+      'requesting_user_id', 'campus_id', 'comments', 'date',
+      'initial', 'final', 'equipaments', 'status'
     ]);
 
     const hourInitial = data.initial.split(":");
@@ -66,59 +58,64 @@ class ScheduleController {
     const schedulesData = await schedulesFiltered(data.date, hourInitial, hourFinal, data.status);
     const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
     const avaibilityPlaces = await availablePlaces(schedulesData, auth);
+    
+    if(dateIsAtTheLimit(data.date)) {
+      const equipamentsVerify = avaibilityEquipaments.filter((equipament) => {
+        return equipaments.includes(equipament.id);
+      });
 
-    const equipamentsVerify = avaibilityEquipaments.filter((equipament) => {
-      return equipaments.includes(equipament.id);
-    });
+      const placeVerify = avaibilityPlaces.filter((place) => {
+        return data.place_id === place.id;
+      });
 
-    const placeVerify = avaibilityPlaces.filter((place) => {
-      return data.place_id === place.id;
-    });
-
-    if(placeVerify.length === 0) {
-      return {
-        "error": "entrada inválida"
+      if(placeVerify.length === 0) {
+        return {
+          error: "A sala solicitada não está disponível"
+        }
       }
-    }
 
-    if(equipaments.length !== 0) {
-      if(equipamentsVerify.length === equipaments.length) {
-        const schedule = await Schedule.create(data);
-  
-        if(equipaments) {
-          await schedule.equipaments().attach(equipaments);
-          await schedule.load('equipaments');
+      if(equipaments.length !== 0) {
+        if(equipamentsVerify.length === equipaments.length) {
+          const schedule = await Schedule.create(data);
+    
+          if(equipaments) {
+            await schedule.equipaments().attach(equipaments);
+            await schedule.load('equipaments');
 
-          const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
-          
-          await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
-            message
-                .from('donotreplyagendamento@unespar.edu.br')
-                .to(addressee.email)
-                .subject('Confirmação de agendamento')
-          });
+            const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+            
+            await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+              message
+                  .from('donotreplyagendamento@unespar.edu.br')
+                  .to(addressee.email)
+                  .subject('Confirmação de agendamento')
+            });
 
-          return schedule;
+            return schedule;
+          }
+        }
+        else {
+          return {
+            error: "Os equipamentos selecionados não estão disponíveis"
+          }
         }
       }
       else {
-        return {
-          "error": "entrada inválida"
-        }
+        const schedule = await Schedule.create(data);
+        const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
+
+        await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+          message
+              .from('donotreplyagendamento@unespar.edu.br')
+              .to(addressee.email)
+              .subject('Confirmação de agendamento')
+        });
+
+        return schedule;
       }
     }
     else {
-      const schedule = await Schedule.create(data);
-      const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
-
-      await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
-        message
-            .from('donotreplyagendamento@unespar.edu.br')
-            .to(addressee.email)
-            .subject('Confirmação de agendamento')
-      });
-
-      return schedule;
+      return { error: "A data inserida não está dentro dos 15 dias limite" }
     }
   }
 
