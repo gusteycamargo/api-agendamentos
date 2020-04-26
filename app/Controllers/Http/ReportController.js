@@ -33,20 +33,6 @@ class ReportController {
         else {
             return response.status(403).send('Área não autorizada');
         } 
-        
-        // const schedulesData = await schedulesFiltered(data.date_a, hourInitial, hourFinal, data.status);
-
-        // if(schedulesData.error) {
-        //     return response.status(418).send('Horário inválido');
-        // }
-
-        // const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
-        // const avaibilityPlaces = await availablePlaces(schedulesData, auth);
-
-        // return {
-        //     avaibilityEquipaments,
-        //     avaibilityPlaces
-        // };
     }
 }
 
