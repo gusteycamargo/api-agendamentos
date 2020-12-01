@@ -22,7 +22,7 @@ Route.get('/', () => {
 
 Route.resource('courses', 'CourseController').apiOnly().middleware('auth');
 Route.resource('categories', 'CategoryController').apiOnly().middleware('auth');
-Route.resource('users', 'UserController').apiOnly().middleware('auth');
+Route.resource('users', 'UserController').apiOnly()
 Route.resource('campuses', 'CampusController').apiOnly().middleware('auth');
 Route.resource('equipaments', 'EquipamentController').apiOnly().middleware('auth');
 Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
