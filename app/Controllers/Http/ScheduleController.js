@@ -115,7 +115,7 @@ class ScheduleController {
       }
     }
     else {
-      return { error: "A data inserida não está dentro dos 15 dias limite" }
+      return response.status(400).send({ error: "Os equipamentos selecionados não estão disponíveis" });
     }
   }
 
@@ -222,7 +222,7 @@ class ScheduleController {
       }
     }
     else {
-      return { error: "A data inserida não está dentro dos 15 dias limite" }
+      return response.status(400).send({ error: "Os equipamentos selecionados não estão disponíveis" });
     }
   }
 
