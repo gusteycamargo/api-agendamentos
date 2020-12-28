@@ -13,12 +13,17 @@ class SessionController {
       else {
         const token = await auth.attempt(username, password);
         response.cookie('token', token, {
-          httpOnly: false,
-          secure: false //mudar pra true
+          httpOnly: true,
         })
         return token;
       }
       
+    }
+
+    async destroy({ response }) {
+      response.clearCookie('token')
+
+      return response.status(200).send('logout ok');
     }
 }
 

@@ -20,16 +20,17 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 });
 
-Route.resource('courses', 'CourseController').apiOnly().middleware('auth');
-Route.resource('categories', 'CategoryController').apiOnly().middleware('auth');
-Route.resource('users', 'UserController').apiOnly().middleware('auth').except(['store']);
-Route.resource('campuses', 'CampusController').apiOnly().middleware('auth');
-Route.resource('equipaments', 'EquipamentController').apiOnly().middleware('auth');
-Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
-Route.resource('schedules', 'ScheduleController').apiOnly().middleware('auth');
-Route.get('/availability', 'AvailabilityController.index').middleware('auth');
-Route.get('/filter', 'FilterScheduleController.index').middleware('auth');
-Route.get('/reports', 'ReportController.index').middleware('auth');
-Route.get('/userLogged', 'UserLoggedController.index').middleware('auth');
+Route.resource('courses', 'CourseController').apiOnly().middleware(['authCookie','auth']);
+Route.resource('categories', 'CategoryController').apiOnly().middleware(['authCookie','auth']);
+Route.resource('users', 'UserController').apiOnly().middleware(['authCookie','auth']).except(['store']);
+Route.resource('campuses', 'CampusController').apiOnly().middleware(['authCookie','auth']);
+Route.resource('equipaments', 'EquipamentController').apiOnly().middleware(['authCookie','auth']);
+Route.resource('places', 'PlaceController').apiOnly().middleware(['authCookie','auth']);
+Route.resource('schedules', 'ScheduleController').apiOnly().middleware(['authCookie','auth']);
+Route.get('/availability', 'AvailabilityController.index').middleware(['authCookie','auth']);
+Route.get('/filter', 'FilterScheduleController.index').middleware(['authCookie','auth']);
+Route.get('/reports', 'ReportController.index').middleware(['authCookie','auth']);
+Route.get('/userLogged', 'UserLoggedController.index').middleware(['authCookie','auth']);
+Route.get('/logout', 'SessionController.destroy').middleware(['authCookie','auth']);
 Route.post('/sessions', 'SessionController.create');
 Route.post('/users', 'UserController.store');
