@@ -14,7 +14,7 @@ class SessionController {
         const token = await auth.attempt(username, password);
         response.cookie('token', token, {
           httpOnly: true,
-          sameSite: 'Lax'
+          sameSite: 'None'
         })
         return token;
       }
