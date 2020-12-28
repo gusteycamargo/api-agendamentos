@@ -23,7 +23,11 @@ class SessionController {
     }
 
     async destroy({ response }) {
-      response.clearCookie('token')
+      response.clearCookie('token', {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+      })
 
       return response.status(200).send('logout ok');
     }
