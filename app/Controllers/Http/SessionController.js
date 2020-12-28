@@ -12,7 +12,10 @@ class SessionController {
       }
       else {
         const token = await auth.attempt(username, password);
-  
+        response.cookie('token', token, {
+          httpOnly: false,
+          secure: false //mudar pra true
+        })
         return token;
       }
       
