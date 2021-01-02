@@ -12,24 +12,9 @@ class SessionController {
       }
       else {
         const token = await auth.attempt(username, password);
-        response.cookie('token', token, {
-          httpOnly: true,
-          sameSite: 'None',
-          secure: true
-        })
         return token;
       }
       
-    }
-
-    async destroy({ response }) {
-      response.clearCookie('token', {
-        httpOnly: true,
-        sameSite: 'None',
-        secure: true
-      })
-
-      return response.status(200).send('logout ok');
     }
 }
 
