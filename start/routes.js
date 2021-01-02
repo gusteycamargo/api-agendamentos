@@ -31,6 +31,5 @@ Route.get('/availability', 'AvailabilityController.index').middleware('auth');
 Route.get('/filter', 'FilterScheduleController.index').middleware('auth');
 Route.get('/reports', 'ReportController.index').middleware('auth');
 Route.get('/userLogged', 'UserLoggedController.index').middleware('auth');
-Route.get('/logout', 'SessionController.destroy').middleware('auth');
 Route.post('/sessions', 'SessionController.create');
 Route.post('/users', 'UserController.store');
