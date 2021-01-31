@@ -12,25 +12,30 @@ const Category = use('App/Models/Category')
 class CategoryController {
  
   async index ({ auth, request, response, view }) {
-    // if(auth.user.function === 'adm') {
+    if(auth.user.function === 'adm') {
       const categories = await Category.query().whereRaw("campus_id = ?", [auth.user.campus_id]).with('campus').orderBy('description', 'cres').fetch();
       //await equipaments.load('campus');
   
       return categories;
-    // }
-    // else {
-    //   return response.status(403).send('Área não autorizada');
-    // } 
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
   }
 
   async store ({ auth, request, response }) {
     if(auth.user.function === 'adm') {
-      const data = request.only(['campus_id', 'description', 'status']);
+      try {
+        const data = request.only(['campus_id', 'description', 'status']);
 
-      const category = await Category.create(data);
-      await category.load('campus');
+        const category = await Category.create(data);
+        await category.load('campus');
 
-      return category;
+        return category;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao salvar o ano, verifique se a descrição já não está sendo utilizada' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
