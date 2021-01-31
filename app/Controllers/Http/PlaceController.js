@@ -64,15 +64,20 @@ class PlaceController {
 
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
-      let place = await Place.findOrFail(params.id);
-      const data = request.only(["campus_id", "name", 'capacity', "status"]);
-
-      await place.merge(data);
-      await place.save();
-
-      return {
-        status: 'ok'
-      };
+      try {
+        let place = await Place.findOrFail(params.id);
+        const data = request.only(["campus_id", "name", 'capacity', "status"]);
+  
+        await place.merge(data);
+        await place.save();
+  
+        return {
+          status: 'ok'
+        };
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao editar a sala, verifique se o nome já não está sendo utilizado' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
