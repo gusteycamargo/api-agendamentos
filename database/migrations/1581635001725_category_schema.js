@@ -15,7 +15,7 @@ class CategorySchema extends Schema {
         .inTable('campuses')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('description', 120).notNullable().unique()
+      table.string('description', 120).notNullable()
       table.string('status').notNullable()
       table.timestamps()
     })

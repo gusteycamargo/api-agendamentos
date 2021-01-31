@@ -27,11 +27,16 @@ class CategoryController {
     if(auth.user.function === 'adm') {
       try {
         const data = request.only(['campus_id', 'description', 'status']);
-
-        const category = await Category.create(data);
-        await category.load('campus');
-
-        return category;
+        const verify = await Category.findBy({ campus_id: auth.user.campus_id, description: data.description });
+        if(!verify) {
+          const category = await Category.create(data);
+          await category.load('campus');
+  
+          return category;
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao salvar o ano, verifique se a descrição já não está sendo utilizada' });
+        }
       }
       catch(e) {
         return response.status(400).send({ error: 'Ocorreu um erro ao salvar o ano, verifique se a descrição já não está sendo utilizada' });
@@ -58,12 +63,18 @@ class CategoryController {
     if(auth.user.function === 'adm') {
       try {
         const data = request.only(["campus_id", "description", "status"]);
-        let category = await Category.findOrFail(params.id);
-        await category.merge(data);
-        await category.save();
-
-        return {
-          status: 'categoria alterada com sucesso'
+        const verify = await Category.findBy({ campus_id: auth.user.campus_id, description: data.description });
+        if(!verify) {
+          let category = await Category.findOrFail(params.id);
+          await category.merge(data);
+          await category.save();
+  
+          return {
+            status: 'categoria alterada com sucesso'
+          }
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao editar o ano, verifique se a descrição já não está sendo utilizada' });
         }
       }
       catch(e) {
