@@ -6,23 +6,33 @@ const Database = use('Database')
 class UserController {
 
   async index ({ auth, request, response, view }) {
-    // if(auth.user.function === 'adm') {
+    if(auth.user.function === 'adm') {
       const users = await User.query().whereRaw("campus_id = ?", [auth.user.campus_id]).orderBy('fullname', 'cres').with('campus').fetch();
       //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
       //await equipaments.load('campus');
   
       return users;
-    // }
-    // else {
-    //   return response.status(403).send('Área não autorizada');
-    // } 
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
   }
 
-  async store ({ request }) {
-    const data = request.only(["campus_id", "username", "email", "password", "fullname", "function", "status"]);    
-    const user = await User.create(data);
-
-    return user;
+  async store ({ auth, request, response }) {
+    if(auth.user.function === 'adm') {
+      try {
+        const data = request.only(["campus_id", "username", "email", "password", "fullname", "function", "status"]);    
+        const user = await User.create(data);
+  
+        return user;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao salvar o usuário, verifique se o nome de usuário ou e-mail já não está sendo utilizado' });
+      }
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
   }
 
   async show ({ auth, params, response, view }) {

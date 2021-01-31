@@ -16,7 +16,7 @@ class UserSchema extends Schema {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.string('username', 80).notNullable().unique()
-      table.string('email', 254).notNullable()
+      table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
       table.string('fullname', 260).notNullable()
       table.string('function', 60).notNullable()
