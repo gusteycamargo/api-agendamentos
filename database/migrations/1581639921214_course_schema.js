@@ -15,7 +15,7 @@ class CourseSchema extends Schema {
         .inTable('campuses')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('name', 120).notNullable().unique()
+      table.string('name', 120).notNullable()
       table.string('status').notNullable()
       table.timestamps()
     })

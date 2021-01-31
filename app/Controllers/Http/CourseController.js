@@ -35,13 +35,19 @@ class CourseController {
     if(auth.user.function === 'adm') {
       try {
         const data = request.only(['campus_id', 'name', 'status']);
-
-        const course = await Course.create(data);
-        await course.load('campus');
-  
-        return course;
+        const verify = await Course.findBy({ campus_id: auth.user.campus_id, name: data.name });
+        if(!verify) {
+          const course = await Course.create(data);
+          await course.load('campus');
+    
+          return course;
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao salvar o curso, verifique se o nome já não está sendo utilizado' });
+        }
       }
       catch(e) {
+        console.log(e);
         return response.status(400).send({ error: 'Ocorreu um erro ao salvar o curso, verifique se o nome já não está sendo utilizado' });
       }
     }
@@ -65,14 +71,21 @@ class CourseController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
-        let course = await Course.findOrFail(params.id);
         const data = request.only(["campus_id", "name", "status"]);
-  
-        await course.merge(data);
-        await course.save();
-  
-        return {
-          status: 'ok'
+        const verify = await Course.findBy({ campus_id: auth.user.campus_id, name: data.name });
+        if(!verify) {
+          
+          let course = await Course.findOrFail(params.id);
+    
+          await course.merge(data);
+          await course.save();
+    
+          return {
+            status: 'ok'
+          }
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao editar o curso, verifique se o nome já não está sendo utilizado' });
         }
       }
       catch(e) {
