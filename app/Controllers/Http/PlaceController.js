@@ -34,11 +34,16 @@ class PlaceController {
   async store ({ auth, request, response }) {
     if(auth.user.function === 'adm') {
       const data = request.only(['campus_id', 'name', 'capacity', 'status']);
-
+      try {
         const place = await Place.create(data);
         await place.load('campus');
   
         return place;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao salvar a sala, verifique se o nome já não está sendo utilizado' });
+      }
+        
     }
     else {
       return response.status(403).send('Área não autorizada');
