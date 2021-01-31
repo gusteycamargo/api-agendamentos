@@ -33,12 +33,17 @@ class CourseController {
 
   async store ({ auth, request, response }) {
     if(auth.user.function === 'adm') {
-      const data = request.only(['campus_id', 'name', 'status']);
+      try {
+        const data = request.only(['campus_id', 'name', 'status']);
 
-      const course = await Course.create(data);
-      await course.load('campus');
-
-      return course;
+        const course = await Course.create(data);
+        await course.load('campus');
+  
+        return course;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao salvar o curso, verifique se o nome já não está sendo utilizado' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
