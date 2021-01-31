@@ -54,13 +54,18 @@ class CampusController {
 
   async update ({ params, request, response, auth }) {
     if(auth.user.function === 'adm') {
-      const campus = await Campus.findOrFail(params.id);
-      const data = request.only(["city", "adress", "status"]);
+      try {
+        const campus = await Campus.findOrFail(params.id);
+        const data = request.only(["city", "adress", "status"]);
 
-      await campus.merge(data);
-      await campus.save();
+        await campus.merge(data);
+        await campus.save();
 
-      return campus;
+        return campus;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao editar o campus, verifique se a cidade já não está cadastrada' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
