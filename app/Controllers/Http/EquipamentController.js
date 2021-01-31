@@ -61,14 +61,19 @@ class EquipamentController {
 
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
-      let equipament = await Equipament.findOrFail(params.id);
-      const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
-
-      await equipament.merge(data);
-      await equipament.save();
-
-      return {
-        status: 'equipamento alterado com sucesso'
+      try {
+        let equipament = await Equipament.findOrFail(params.id);
+        const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
+  
+        await equipament.merge(data);
+        await equipament.save();
+  
+        return {
+          status: 'equipamento alterado com sucesso'
+        }
+      }
+      catch (error) {
+        return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
       }
     }
     else {

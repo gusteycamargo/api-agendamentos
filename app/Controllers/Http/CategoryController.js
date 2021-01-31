@@ -56,15 +56,19 @@ class CategoryController {
 
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
-      let category = await Category.findOrFail(params.id);
-      const data = request.only(["campus_id", "description", "status"]);
+      try {
+        const data = request.only(["campus_id", "description", "status"]);
+        let category = await Category.findOrFail(params.id);
+        await category.merge(data);
+        await category.save();
 
-      await category.merge(data);
-      await category.save();
-
-      return {
-        status: 'categoria alterada com sucesso'
-      };
+        return {
+          status: 'categoria alterada com sucesso'
+        }
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao editar o ano, verifique se a descrição já não está sendo utilizada' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
