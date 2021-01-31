@@ -51,15 +51,18 @@ class UserController {
 
   async update ({ auth, params, response, request }) {
     if(auth.user.function === 'adm') {
-      const user = await User.findOrFail(params.id);
-      const data = request.only(['username', 'email', 'fullname', 'function', 'status']);
-
-      await user.merge(data);
-      await user.save();
-      //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-      //await equipaments.load('campus');
+      try {
+        const user = await User.findOrFail(params.id);
+        const data = request.only(['username', 'email', 'fullname', 'password', 'function', 'status', 'campus_id']);
   
-      return user;
+        await user.merge(data);
+        await user.save(); 
+        
+        return user;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao editar o usuário, verifique se o nome de usuário ou e-mail já não está sendo utilizado' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
