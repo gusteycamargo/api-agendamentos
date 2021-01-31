@@ -24,11 +24,16 @@ class CampusController {
 
   async store ({ request, response, auth }) {
     if(auth.user.function === 'adm') {
-      const data = request.only(['city', 'adress', 'status']);
+      try {
+        const data = request.only(['city', 'adress', 'status']);
 
-      const campus = await Campus.create(data);
-  
-      return campus;
+        const campus = await Campus.create(data);
+    
+        return campus;
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao salvar o campus, verifique se a cidade já não está cadastrada' });
+      }
     }
     else {
       return response.status(403).send('Área não autorizada');
