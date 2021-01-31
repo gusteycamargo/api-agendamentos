@@ -34,9 +34,7 @@ class EquipamentController {
         return equipament;
       }
       catch (error) {
-        return {
-          error: 'Inserção inválida'
-        }
+        return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
       }
     }
     else {
@@ -53,9 +51,7 @@ class EquipamentController {
         return equipament;
       }
       catch (error) {
-        return {
-          error: 'equipamento não encontrado'
-        };
+        return response.status(404).send({ error: 'Equipamento não encontrado' });
       }
     }
     else {
