@@ -15,7 +15,7 @@ class EquipamentSchema extends Schema {
         .inTable('campuses')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('equityNumber', 120).notNullable().unique()
+      table.string('equityNumber', 120).notNullable()
       table.string('brand').notNullable()
       table.string('name').notNullable()
       table.string('status').notNullable()

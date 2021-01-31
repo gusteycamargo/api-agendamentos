@@ -25,13 +25,19 @@ class EquipamentController {
 
   async store ({ auth, request, response }) {
     if(auth.user.function === 'adm') {
-      const data = request.only(['campus_id', 'equityNumber', 'brand', 'name', 'status']);
-
       try {
-        const equipament = await Equipament.create(data);
-        await equipament.load('campus');
-  
-        return equipament;
+        const data = request.only(['campus_id', 'equityNumber', 'brand', 'name', 'status']);
+        const verify = await Equipament.findBy({ campus_id: auth.user.campus_id, equityNumber: data.equityNumber });
+
+        if(!verify) {
+          const equipament = await Equipament.create(data);
+          await equipament.load('campus');
+    
+          return equipament;
+        }
+        else {
+          return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
+        }
       }
       catch (error) {
         return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
@@ -62,14 +68,21 @@ class EquipamentController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
-        let equipament = await Equipament.findOrFail(params.id);
         const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
+        const verify = await Equipament.findBy({ campus_id: auth.user.campus_id, equityNumber: data.equityNumber });
+
+        if(!verify) {
+          let equipament = await Equipament.findOrFail(params.id);
   
-        await equipament.merge(data);
-        await equipament.save();
-  
-        return {
-          status: 'equipamento alterado com sucesso'
+          await equipament.merge(data);
+          await equipament.save();
+    
+          return {
+            status: 'equipamento alterado com sucesso'
+          }
+        }
+        else {
+          return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
         }
       }
       catch (error) {
