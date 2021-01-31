@@ -64,14 +64,19 @@ class CourseController {
 
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
-      let course = await Course.findOrFail(params.id);
-      const data = request.only(["campus_id", "name", "status"]);
-
-      await course.merge(data);
-      await course.save();
-
-      return {
-        status: 'ok'
+      try {
+        let course = await Course.findOrFail(params.id);
+        const data = request.only(["campus_id", "name", "status"]);
+  
+        await course.merge(data);
+        await course.save();
+  
+        return {
+          status: 'ok'
+        }
+      }
+      catch(e) {
+        return response.status(400).send({ error: 'Ocorreu um erro ao editar o curso, verifique se o nome já não está sendo utilizado' });
       }
     }
     else {
