@@ -62,10 +62,10 @@ class CategoryController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
+        let category = await Category.findOrFail(params.id);
         const data = request.only(["campus_id", "description", "status"]);
         const verify = await Category.findBy({ campus_id: auth.user.campus_id, description: data.description });
-        if(!verify) {
-          let category = await Category.findOrFail(params.id);
+        if(!verify || category.description === data.description) {
           await category.merge(data);
           await category.save();
   
