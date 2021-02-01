@@ -19,7 +19,7 @@ module.exports = function definePeriod(period, subPeriod) {
     }
     else if(period == 2) {
         if(subPeriod == 1) {
-            classOne = ['12:00:00', '14:00:00'];
+            classOne = ['12:00:00', '14:30:00'];
             classTwo = ['13:00:00', '19:00:00'];
         }
         else if(subPeriod == 2) {
@@ -34,7 +34,7 @@ module.exports = function definePeriod(period, subPeriod) {
     }
     else if(period == 3) {
         if(subPeriod == 1) {
-            classOne = ['17:00:00', '19:00:00'];
+            classOne = ['17:00:00', '19:40:00'];
             classTwo = ['19:00:00', '23:00:00'];
         }
         else if(subPeriod == 2) {
