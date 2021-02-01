@@ -72,12 +72,11 @@ class PlaceController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
+        let place = await Place.findOrFail(params.id);
         const data = request.only(["campus_id", "name", 'capacity', "status"]);
         const verify = await Place.findBy({ campus_id: auth.user.campus_id, name: data.name });
 
-        if(!verify) {
-          let place = await Place.findOrFail(params.id);
-  
+        if(!verify || place.name === data.name) {
           await place.merge(data);
           await place.save();
     
