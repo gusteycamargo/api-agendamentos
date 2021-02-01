@@ -33,12 +33,19 @@ class PlaceController {
 
   async store ({ auth, request, response }) {
     if(auth.user.function === 'adm') {
-      const data = request.only(['campus_id', 'name', 'capacity', 'status']);
       try {
-        const place = await Place.create(data);
-        await place.load('campus');
-  
-        return place;
+        const data = request.only(['campus_id', 'name', 'capacity', 'status']);
+        const verify = await Place.findBy({ campus_id: auth.user.campus_id, name: data.name });
+
+        if(!verify) {
+          const place = await Place.create(data);
+          await place.load('campus');
+    
+          return place;
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao salvar a sala, verifique se o nome já não está sendo utilizado' });
+        }
       }
       catch(e) {
         return response.status(400).send({ error: 'Ocorreu um erro ao salvar a sala, verifique se o nome já não está sendo utilizado' });
@@ -65,15 +72,22 @@ class PlaceController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
-        let place = await Place.findOrFail(params.id);
         const data = request.only(["campus_id", "name", 'capacity', "status"]);
+        const verify = await Place.findBy({ campus_id: auth.user.campus_id, name: data.name });
+
+        if(!verify) {
+          let place = await Place.findOrFail(params.id);
   
-        await place.merge(data);
-        await place.save();
-  
-        return {
-          status: 'ok'
-        };
+          await place.merge(data);
+          await place.save();
+    
+          return {
+            status: 'ok'
+          };
+        }
+        else {
+          return response.status(400).send({ error: 'Ocorreu um erro ao editar a sala, verifique se o nome já não está sendo utilizado' });
+        }
       }
       catch(e) {
         return response.status(400).send({ error: 'Ocorreu um erro ao editar a sala, verifique se o nome já não está sendo utilizado' });

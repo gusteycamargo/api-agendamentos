@@ -15,7 +15,7 @@ class PlaceSchema extends Schema {
         .inTable('campuses')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('name', 100).notNullable().unique()
+      table.string('name', 100).notNullable()
       table.integer('capacity').notNullable()
       table.string('status').notNullable()
       table.timestamps()
