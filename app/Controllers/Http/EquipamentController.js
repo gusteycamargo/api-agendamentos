@@ -68,12 +68,11 @@ class EquipamentController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
+        let equipament = await Equipament.findOrFail(params.id);
         const data = request.only(["campus_id", "equityNumber", "brand", "name", "status"]);
         const verify = await Equipament.findBy({ campus_id: auth.user.campus_id, equityNumber: data.equityNumber });
 
-        if(!verify) {
-          let equipament = await Equipament.findOrFail(params.id);
-  
+        if(!verify || equipament.equityNumber === data.equityNumber) {  
           await equipament.merge(data);
           await equipament.save();
     
