@@ -71,12 +71,10 @@ class CourseController {
   async update ({ params, auth, request, response }) {
     if(auth.user.function === 'adm') {
       try {
+        let course = await Course.findOrFail(params.id);
         const data = request.only(["campus_id", "name", "status"]);
         const verify = await Course.findBy({ campus_id: auth.user.campus_id, name: data.name });
-        if(!verify) {
-          
-          let course = await Course.findOrFail(params.id);
-    
+        if(!verify || course.name === data.name) {    
           await course.merge(data);
           await course.save();
     
