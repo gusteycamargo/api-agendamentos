@@ -7,7 +7,7 @@ module.exports = async function schedulesFiltered(date, hourInitial, hourFinal, 
     period = definePeriod(hourInitial, hourFinal);
     subPeriod = defineSubPeriod(hourInitial, hourFinal);
 
-    if(period === 0) {
+    if(period === 0 || subPeriod === 0) {
         return { error: 'Horário inválido'}
     }
 
