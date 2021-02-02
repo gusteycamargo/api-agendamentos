@@ -7,7 +7,7 @@ module.exports = function definePeriod(hourInitial, hourFinal) {
         subPeriod = 1;
     }
     else if ((hourInitial[0] >= 17) && (hourInitial[0] <= 19) && (hourFinal[0] >= 21) && (hourFinal[0] <= 22)
-            || ((hourInitial[0] >= 12) && (hourInitial[0] <= 14) && (hourFinal[0] >= 16) && (hourFinal[0] <= 19))
+            || ((hourInitial[0] >= 12) && (hourInitial[0] <= 14) && (hourFinal[0] >= 16) && (hourFinal[0] <= 18))
             || ((hourInitial[0] >= 8) && (hourInitial[0] <= 9) && (hourFinal[0] >= 11) && (hourFinal[0] <= 12))) {
 
         subPeriod = 2;
