@@ -15,7 +15,7 @@ class AvailabilityController {
             const schedulesData = await schedulesFiltered(data.date_a, hourInitial, hourFinal, data.status);
 
             if(schedulesData.error) {
-                return response.status(418).send({ error: "Os horários inseridos são inválidos, insira um horário entre 08:00 às 12:00, 13:00 às 19:00 ou das 17:00 às 22:45" });
+                return response.status(418).send({ error: "Os horários inseridos são inválidos, insira um horário entre 08:00 às 12:59, 13:00 às 18:59 ou das 17:00 às 22:59" });
             }
 
             const avaibilityEquipaments = await availableEquipaments(schedulesData, auth);
