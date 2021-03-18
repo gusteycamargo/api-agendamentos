@@ -114,6 +114,24 @@ class PlaceController {
     }
     
   }
+
+  async restore ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let place = await Place.findOrFail(params.id);
+      
+      await place.merge({status: 'Ativo'});
+      await place.save();
+
+      return {
+        status: 'ok'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
+  }
 }
 
 module.exports = PlaceController
