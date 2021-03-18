@@ -112,6 +112,24 @@ class CourseController {
     }
     
   }
+
+  async restore ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let course = await Course.findOrFail(params.id);
+      
+      await course.merge({status: 'Ativo'});
+      await course.save();
+
+      return {
+        status: 'ok'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
+  }
 }
 
 module.exports = CourseController
