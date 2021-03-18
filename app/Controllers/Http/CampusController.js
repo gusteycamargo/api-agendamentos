@@ -85,6 +85,20 @@ class CampusController {
       return response.status(403).send('Área não autorizada');
     }
   }
+
+  async restore ({ params, request, response, auth }) {
+    if(auth.user.function === 'adm') {
+      const campus = await Campus.findOrFail(params.id);
+
+      await campus.merge({ status: 'Ativo'});
+      await campus.save();
+
+      return campus;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+  }
 }
 
 module.exports = CampusController

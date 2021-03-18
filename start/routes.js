@@ -29,6 +29,7 @@ Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
 Route.resource('schedules', 'ScheduleController').apiOnly().middleware('auth');
 Route.get('/availability', 'AvailabilityController.index').middleware('auth');
 Route.post('/users/restore/:id', 'UserController.restore').middleware('auth');
+Route.post('/campuses/restore/:id', 'CampusController.restore').middleware('auth');
 
 Route.get('/filter', 'FilterScheduleController.index').middleware('auth');
 Route.get('/reports', 'ReportController.index').middleware('auth');
