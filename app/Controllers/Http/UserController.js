@@ -75,8 +75,20 @@ class UserController {
 
       await user.merge({ status: 'Inativo' });
       await user.save();
-      //const users = await Database.select('id', 'username', 'email', 'fullname', 'function', 'status').from('users').query().with('campus').fetch();
-      //await equipaments.load('campus');
+      
+      return user;
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    } 
+  }
+
+  async restore ({ auth, params, response, request }) {
+    if(auth.user.function === 'adm') {
+      const user = await User.findOrFail(params.id);
+
+      await user.merge({ status: 'Ativo' });
+      await user.save();
   
       return user;
     }
