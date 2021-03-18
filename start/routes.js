@@ -17,7 +17,7 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { welcome: 'Bem-vindo a API do SASE!' }
 });
 
 Route.resource('courses', 'CourseController').apiOnly().middleware('auth');
@@ -28,10 +28,10 @@ Route.resource('equipaments', 'EquipamentController').apiOnly().middleware('auth
 Route.resource('places', 'PlaceController').apiOnly().middleware('auth');
 Route.resource('schedules', 'ScheduleController').apiOnly().middleware('auth');
 
+Route.post('/courses/restore/:id', 'CourseController.restore').middleware('auth');
+Route.post('/categories/restore/:id', 'CategoryController.restore').middleware('auth');
 Route.post('/users/restore/:id', 'UserController.restore').middleware('auth');
 Route.post('/campuses/restore/:id', 'CampusController.restore').middleware('auth');
-Route.post('/categories/restore/:id', 'CategoryController.restore').middleware('auth');
-Route.post('/courses/restore/:id', 'CourseController.restore').middleware('auth');
 Route.post('/equipaments/restore/:id', 'EquipamentController.restore').middleware('auth');
 Route.post('/places/restore/:id', 'PlaceController.restore').middleware('auth');
 
