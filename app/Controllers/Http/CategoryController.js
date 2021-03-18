@@ -99,6 +99,24 @@ class CategoryController {
     
   }
 
+  async restore ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let category = await Category.findOrFail(params.id);
+      
+      await category.merge({status: 'Ativo'});
+      await category.save();
+
+      return {
+        status: 'categoria deletada com sucesso'
+      };
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
+  }
+
 }
 
 module.exports = CategoryController
