@@ -32,6 +32,7 @@ Route.post('/users/restore/:id', 'UserController.restore').middleware('auth');
 Route.post('/campuses/restore/:id', 'CampusController.restore').middleware('auth');
 Route.post('/categories/restore/:id', 'CategoryController.restore').middleware('auth');
 Route.post('/courses/restore/:id', 'CourseController.restore').middleware('auth');
+Route.post('/equipaments/restore/:id', 'EquipamentController.restore').middleware('auth');
 
 Route.get('/availability', 'AvailabilityController.index').middleware('auth');
 Route.get('/filter', 'FilterScheduleController.index').middleware('auth');

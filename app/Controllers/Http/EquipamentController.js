@@ -110,6 +110,24 @@ class EquipamentController {
     }
     
   }
+
+  async restore ({ params, auth, request, response }) {
+   
+    if(auth.user.function === 'adm') {
+      let equipament = await Equipament.findOrFail(params.id);
+      
+      await equipament.merge({status: 'Ativo'});
+      await equipament.save();
+
+      return {
+        status: 'equipamento deletado com sucesso'
+      }
+    }
+    else {
+      return response.status(403).send('Área não autorizada');
+    }
+    
+  }
 }
 
 module.exports = EquipamentController
