@@ -150,3 +150,42 @@ test('restore campus', async ({ client }) => {
     status: 'Ativo'
   })
 })
+
+test('update campus with name of another city already registered', async ({ client }) => {
+  const sao_paulo = await Campus.create({
+    city: 'São Paulo',
+    adress: 'Avenida paulista',
+    status: 'Ativo'
+  })
+
+  const response = await client.put(`/campuses/${sao_paulo.id}`)
+  .send({
+    city: "Paranaguá"
+  })
+  .loginVia(user, 'jwt')
+  .end()
+
+  response.assertStatus(400)
+  response.assertError({
+    error: 'Ocorreu um erro ao editar o campus, verifique se a cidade já não está cadastrada'
+  })
+})
+
+test('access campus controller with non-administrator user', async ({ client }) => {
+  const non_adm = await User.create({
+    campus_id: campus.id,
+    username: "gusta.camargo",
+    email: "gustavo@gmail.com",
+    password: "senha123",
+    fullname: "Gustavo Galdino de Camargo",
+    function: "user",
+    status: "Ativo"
+  })
+
+  const response = await client.get('/campuses')
+  .loginVia(non_adm, 'jwt')
+  .end()
+
+  response.assertStatus(403)
+  response.assertError('Área não autorizada')
+})
