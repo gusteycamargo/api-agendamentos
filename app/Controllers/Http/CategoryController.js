@@ -108,7 +108,7 @@ class CategoryController {
       await category.save();
 
       return {
-        status: 'categoria deletada com sucesso'
+        status: 'categoria restaurada com sucesso'
       };
     }
     else {
