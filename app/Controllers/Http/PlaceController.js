@@ -80,9 +80,7 @@ class PlaceController {
           await place.merge(data);
           await place.save();
     
-          return {
-            status: 'ok'
-          };
+          return place
         }
         else {
           return response.status(400).send({ error: 'Ocorreu um erro ao editar a sala, verifique se o nome já não está sendo utilizado' });

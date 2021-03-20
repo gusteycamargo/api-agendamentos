@@ -120,8 +120,10 @@ test('update category', async ({ client }) => {
   .end()
 
   response.assertStatus(200)
-  response.assertJSON({
-    status: 'categoria alterada com sucesso'
+  response.assertJSONSubset({
+    campus_id: campus.id,
+    description: '2º ano',
+    status: 'Ativo'
   })
 })
 

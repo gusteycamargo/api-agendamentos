@@ -120,8 +120,10 @@ test('update course', async ({ client }) => {
   .end()
 
   response.assertStatus(200)
-  response.assertJSON({
-    status: 'ok'
+  response.assertJSONSubset({
+    campus_id: campus.id,
+    name: 'Análise e desenvolvimento de sistemas',
+    status: 'Ativo'
   })
 })
 

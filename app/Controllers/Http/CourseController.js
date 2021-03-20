@@ -78,9 +78,7 @@ class CourseController {
           await course.merge(data);
           await course.save();
     
-          return {
-            status: 'ok'
-          }
+          return course
         }
         else {
           return response.status(400).send({ error: 'Ocorreu um erro ao editar o curso, verifique se o nome já não está sendo utilizado' });

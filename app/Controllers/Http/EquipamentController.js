@@ -76,9 +76,7 @@ class EquipamentController {
           await equipament.merge(data);
           await equipament.save();
     
-          return {
-            status: 'equipamento alterado com sucesso'
-          }
+          return equipament
         }
         else {
           return response.status(400).send({ error: 'Inserção inválida, verifique se o número de patrimônio já não está cadastrado' });
@@ -120,7 +118,7 @@ class EquipamentController {
       await equipament.save();
 
       return {
-        status: 'equipamento deletado com sucesso'
+        status: 'equipamento restaurado com sucesso'
       }
     }
     else {

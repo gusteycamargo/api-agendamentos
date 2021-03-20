@@ -64,9 +64,7 @@ class CategoryController {
           await category.merge(data);
           await category.save();
   
-          return {
-            status: 'categoria alterada com sucesso'
-          }
+          return category
         }
         else {
           return response.status(400).send({ error: 'Ocorreu um erro ao editar o ano, verifique se a descrição já não está sendo utilizada' });
