@@ -39,9 +39,7 @@ jobs:
         envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
         envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-      
-    - name: Generate app key
-      run: adonis key:generate
+        envkey_APP_KEY: ${{ adonis key:generate }}
         
     - name: Run tests
       run: yarn test
