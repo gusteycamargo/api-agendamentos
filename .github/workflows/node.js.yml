@@ -23,6 +23,9 @@ jobs:
     - name: Install dependencies
       run: yarn
       
+    - name: Install adonis
+      run: npm i -g @adonisjs/cli
+      
     - name: Make envfile
       uses: SpicyPizza/create-envfile@v1
       with:
