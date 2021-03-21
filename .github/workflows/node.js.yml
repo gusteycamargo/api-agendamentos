@@ -23,20 +23,38 @@ jobs:
     - name: Install dependencies
       run: yarn
       
-    - name: Test
-      run: echo ${{ secrets.TEST }}
+    - name: Make envfile testing
+      uses: SpicyPizza/create-envfile@v1
+      with:
+        envkey_APP_KEY: ${{ secrets.APP_KEY }}
+        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        envkey_DB_CONNECTION: mysql
+        envkey_DB_HOST: ${{ secrets.DB_HOST }}
+        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        envkey_DB_USER: ${{ secrets.DB_USER }}
+        envkey_MAIL_HOST: ${{ secrets.MAIL_HOST }}
+        envkey_MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
+        envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+        envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
+        file_name: .env.testing
+   
+    - name: Make envfile prod
+      uses: SpicyPizza/create-envfile@v1
+      with:
+        envkey_APP_KEY: ${{ secrets.APP_KEY }}
+        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE_PROD }}
+        envkey_DB_CONNECTION: mysql
+        envkey_DB_HOST: ${{ secrets.DB_HOST_PROD }}
+        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD_PROD }}
+        envkey_DB_USER: ${{ secrets.DB_USER_PROD }}
+        envkey_MAIL_HOST: ${{ secrets.MAIL_HOST }}
+        envkey_MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
+        envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+        envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
+        file_name: .env
+   
    
     - name: Run tests
-      env:
-        DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_CONNECTION: mysql
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_USER: ${{ secrets.DB_USER }}
-        MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-        MAIL_PORT: ${{ secrets.MAIL_PORT }}
-        MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-        SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-        APP_KEY: ${{ secrets.APP_KEY }}
       run: yarn test
