@@ -22,104 +22,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       run: yarn
-      
-    - name: DB_DATABASE to DotenvTEST
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_DATABASE'
-        value: ${{ secrets.DB_DATABASE }}
-        envPath: '.env.testing'
-    
-    - name: DB_HOST to DotenvTEST
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_HOST'
-        value: ${{ secrets.DB_HOST }}
-        envPath: '.env.testing'
-        
-    - name: DB_PASSWORD to DotenvTEST
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_PASSWORD'
-        value: ${{ secrets.DB_PASSWORD }}
-        envPath: '.env.testing'
-        
-    - name: DB_USER to DotenvTEST
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_USER'
-        value: ${{ secrets.DB_USER }}
-        envPath: '.env.testing'
-    
-    - name: APP_KEY to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'APP_KEY' # [Required]
-        value: ${{secrets.APP_KEY}} # [Required]
-        
-    - name: DB_DATABASE to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_DATABASE'
-        value: ${{ secrets.DB_DATABASE_PROD }}
-        
-    - name: DB_HOST to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_HOST'
-        value: ${{ secrets.DB_HOST_PROD }}
-        
-    - name: DB_CONNECTION to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_CONNECTION'
-        value: mysql  
-
-    - name: DB_PASSWORD to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_PASSWORD'
-        value: ${{ secrets.DB_PASSWORD_PROD }}
-   
-    - name: DB_USER to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'DB_USER'
-        value: ${{ secrets.DB_USER_PROD }}
-        
-    - name: MAIL_HOST to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'MAIL_HOST'
-        value: ${{ secrets.MAIL_HOST }}
-        
-    - name: MAIL_PASSWORD to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'MAIL_PASSWORD'
-        value: ${{ secrets.MAIL_PASSWORD }}
-        
-    - name: MAIL_PORT to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'MAIL_PORT'
-        value: ${{ secrets.MAIL_PORT }}
-      
-    - name: MAIL_USERNAME to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'MAIL_USERNAME'
-        value: ${{ secrets.MAIL_USERNAME }}
-        
-    - name: SESSION_DRIVER to Dotenv
-      uses: TickX/var-to-dotenv@v1.1.4
-      with:
-        key: 'SESSION_DRIVER'
-        value: ${{ secrets.SESSION_DRIVER }}
-        
-    - name: print env
-      run: | 
-            cat src/.env
+            
+    - name: Define env to node ace
+      env: 
+        APP_KEY: ${{ secrets.APP_KEY }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_USER: ${{ secrets.DB_USER }}
+        MAIL_HOST: ${{ secrets.MAIL_HOST }}
+        MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        MAIL_PORT: ${{ secrets.MAIL_PORT }}
+        MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+        SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
+      run: node ace --env ${{ env }}
             
     - name: Run tests
       run: yarn test
