@@ -22,26 +22,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       run: yarn
-            
-    - name: Define env to node ace
-      env: 
-        APP_KEY: ${{ secrets.APP_KEY }}
-        DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_USER: ${{ secrets.DB_USER }}
-        MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-        MAIL_PORT: ${{ secrets.MAIL_PORT }}
-        MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-        SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-      run: node ace --env ${{ env }}
       
     - name: Secrets to env
       uses: shine1594/secrets-to-env-action@v1.5.2
       with:
         secrets: ${{ toJSON(secrets) }}
         secrets_env: all
+        
+    - name: Define env to node ace
+      run: node ace --env .env
             
     - name: Run tests
       run: yarn test
