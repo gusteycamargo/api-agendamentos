@@ -36,6 +36,12 @@ jobs:
         MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
       run: node ace --env ${{ env }}
+      
+    - name: Secrets to env
+      uses: shine1594/secrets-to-env-action@v1.5.2
+      with:
+        secrets: ${{ toJSON(secrets) }}
+        secrets_env: all
             
     - name: Run tests
       run: yarn test
