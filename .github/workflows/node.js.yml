@@ -23,6 +23,21 @@ jobs:
     - name: Install dependencies
       run: yarn
       
+    - name: print secrets
+      run: |
+          echo $DEV_ENV_FILE >> src/.env
+          cat src/.env
+      shell: bash
+      env:
+        DEV_ENV_FILE : ${{secrets.DB_DATABASE}}
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: DEV_ENV_FILE
+       path: src/.env
+       
+       
+      
     - name: DB_DATABASE to DotenvTEST
       uses: TickX/var-to-dotenv@v1.1.4
       with:
