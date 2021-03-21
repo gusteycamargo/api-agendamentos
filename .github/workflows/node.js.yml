@@ -23,44 +23,99 @@ jobs:
     - name: Install dependencies
       run: yarn
       
-    - shell: bash
-      env:
-        SUPER_SECRET: ${{ secrets.DB_DATABASE }}
-      run: |
-        example-command "$SUPER_SECRET"  
+    - name: DB_DATABASE to DotenvTEST
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_DATABASE'
+        value: ${{ secrets.DB_DATABASE }}
+        envPath: '.env.testing'
     
-    - name: Make envfile testing
-      uses: SpicyPizza/create-envfile@v1
+    - name: DB_HOST to DotenvTEST
+      uses: TickX/var-to-dotenv@v1.1.4
       with:
-        envkey_APP_KEY: ${{ secrets.APP_KEY }}
-        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        envkey_DB_CONNECTION: mysql
-        envkey_DB_HOST: ${{ secrets.DB_HOST }}
-        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        envkey_DB_USER: ${{ secrets.DB_USER }}
-        envkey_MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        envkey_MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-        envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
-        envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-        envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-        file_name: .env.testing
-   
-    - name: Make envfile prod
-      uses: SpicyPizza/create-envfile@v1
+        key: 'DB_HOST'
+        value: ${{ secrets.DB_HOST }}
+        envPath: '.env.testing'
+        
+    - name: DB_PASSWORD to DotenvTEST
+      uses: TickX/var-to-dotenv@v1.1.4
       with:
-        envkey_APP_KEY: ${{ secrets.APP_KEY }}
-        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE_PROD }}
-        envkey_DB_CONNECTION: mysql
-        envkey_DB_HOST: ${{ secrets.DB_HOST_PROD }}
-        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD_PROD }}
-        envkey_DB_USER: ${{ secrets.DB_USER_PROD }}
-        envkey_MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        envkey_MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-        envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
-        envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-        envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-        file_name: .env
+        key: 'DB_PASSWORD'
+        value: ${{ secrets.DB_PASSWORD }}
+        envPath: '.env.testing'
+        
+    - name: DB_USER to DotenvTEST
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_USER'
+        value: ${{ secrets.DB_USER }}
+        envPath: '.env.testing'
+    
+    - name: APP_KEY to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'APP_KEY' # [Required]
+        value: ${{secrets.APP_KEY}} # [Required]
+        
+    - name: DB_DATABASE to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_DATABASE'
+        value: ${{ secrets.DB_DATABASE_PROD }}
+        
+    - name: DB_HOST to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_HOST'
+        value: ${{ secrets.DB_HOST_PROD }}
+        
+    - name: DB_CONNECTION to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_CONNECTION'
+        value: mysql  
+
+    - name: DB_PASSWORD to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_PASSWORD'
+        value: ${{ secrets.DB_PASSWORD_PROD }}
    
+    - name: DB_USER to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'DB_USER'
+        value: ${{ secrets.DB_USER_PROD }}
+        
+    - name: MAIL_HOST to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'MAIL_HOST'
+        value: ${{ secrets.MAIL_HOST }}
+        
+    - name: MAIL_PASSWORD to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'MAIL_PASSWORD'
+        value: ${{ secrets.MAIL_PASSWORD }}
+        
+    - name: MAIL_PORT to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'MAIL_PORT'
+        value: ${{ secrets.MAIL_PORT }}
+      
+    - name: MAIL_USERNAME to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'MAIL_USERNAME'
+        value: ${{ secrets.MAIL_USERNAME }}
+        
+    - name: SESSION_DRIVER to Dotenv
+      uses: TickX/var-to-dotenv@v1.1.4
+      with:
+        key: 'SESSION_DRIVER'
+        value: ${{ secrets.SESSION_DRIVER }}
    
     - name: Run tests
       run: yarn test
