@@ -22,6 +22,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       run: yarn
+      
+    - name: Hello world action
+      with: # Set the secret as an input
+        super_secret: ${{ secrets.DB_USER }}
+      env: # Or as an environment variable
+        super_secret: ${{ secrets.DB_USER }}
         
     - name: Run tests
       run: yarn test
