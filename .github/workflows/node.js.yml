@@ -24,17 +24,14 @@ jobs:
       run: yarn
       
     - name: Secrets to env
-      uses: shine1594/secrets-to-env-action@v1.5.2
-      with:
-        secrets: ${{ toJSON(secrets) }}
-        secrets_env: all
-
+    - run: bash ../createEnvFile.sh "$secrets"
+      env:
+        secrets: ${{ toJson(secrets) }}
+        
     - name: Secrets to env testing
-      uses: shine1594/secrets-to-env-action@v1.5.2
-      with:
-        secrets: ${{ toJSON(secrets) }}
-        secrets_env: all
-        file_name_prod: .env.testing
+    - run: bash ../createEnvTestingFile.sh "$secrets"
+      env:
+        secrets: ${{ toJson(secrets) }}
             
     - name: Run tests
       run: yarn test
