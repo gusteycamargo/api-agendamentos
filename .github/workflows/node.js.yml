@@ -29,5 +29,4 @@ jobs:
     - run: npm i -g @adonisjs/cli
     - name: Run
     - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - run: adonis test
