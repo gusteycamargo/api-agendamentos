@@ -23,10 +23,15 @@ jobs:
     - name: Install dependencies
       run: yarn
       
-    - run: 'echo "$DB_DATABASE" > key'
-      shell: bash
+    - name: Test
       env:
-        SSH_KEY: ${{secrets.DB_DATABASE}}
+        TEST: ${{secrets.DB_DATABASE}}
+      run: echo "TEST"
+        
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
       
     - name: Make envfile testing
       uses: SpicyPizza/create-envfile@v1
