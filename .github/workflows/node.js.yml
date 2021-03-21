@@ -36,14 +36,10 @@ jobs:
         envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
         envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-        directory: .
-        file_name: .env
       
-    - name: Hello world action
-      run: # Set the secret as an input
-        echo ${{ secrets.DB_USER }}
-      env: # Or as an environment variable
-        super_secret: ${{ secrets.DB_USER }}
+    - name: Generate app key
+      run: adonis key:generate
         
     - name: Run tests
+      run: yarn test
       run: yarn test
