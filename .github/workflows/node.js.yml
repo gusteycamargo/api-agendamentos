@@ -28,9 +28,13 @@ jobs:
       with:
         secrets: ${{ toJSON(secrets) }}
         secrets_env: all
-        
-    - name: Define env to node ace
-      run: node ace --env .env
+
+    - name: Secrets to env testing
+      uses: shine1594/secrets-to-env-action@v1.5.2
+      with:
+        secrets: ${{ toJSON(secrets) }}
+        secrets_env: all
+        file_name_prod: .env.testing
             
     - name: Run tests
       run: yarn test
