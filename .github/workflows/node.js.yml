@@ -23,7 +23,6 @@ jobs:
     - name: Install dependencies
       run: yarn
       
-    - name: TEST
     - run: 'echo "$DB_DATABASE" > key'
       shell: bash
       env:
