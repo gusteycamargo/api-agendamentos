@@ -23,14 +23,19 @@ jobs:
     - name: Install dependencies
       run: yarn
       
+    - name: Give permission createEnvFile
+      run: chmod +x ./.github/createEnvFile.sh
+
+    - name: Give permission createEnvTestingFle
+      run: chmod +x ./.github/createEnvTestingFile.sh
+
     - name: Secrets to env
-      run: bash ../createEnvFile.sh "$secrets"
+      run: ./.github/createEnvFile.sh "$secrets"
       env:
-        secrets: ${{ toJson(secrets) }}
-      
+       secrets: ${{ toJson(secrets) }}
         
     - name: Secrets to env testing
-      run: bash ../createEnvTestingFile.sh "$secrets"
+      run: ./.github/createEnvTestingFile.sh "$secrets"
       env:
         secrets: ${{ toJson(secrets) }}
             
