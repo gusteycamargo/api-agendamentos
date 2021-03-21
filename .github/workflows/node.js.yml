@@ -26,7 +26,7 @@ jobs:
     - name: Test
       env:
         TEST: ${{secrets.DB_DATABASE}}
-      run: echo "TEST"
+      run: echo "${TEST}"
         
     - name: Dump GitHub context
       env:
