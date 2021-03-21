@@ -24,15 +24,15 @@ jobs:
       run: yarn
       
     - name: Secrets to env
+      run: bash ../createEnvFile.sh "$secrets"
       env:
         secrets: ${{ toJson(secrets) }}
-    - run: bash ../createEnvFile.sh "$secrets"
       
         
     - name: Secrets to env testing
+      run: bash ../createEnvTestingFile.sh "$secrets"
       env:
         secrets: ${{ toJson(secrets) }}
-    - run: bash ../createEnvTestingFile.sh "$secrets"
             
     - name: Run tests
       run: yarn test
