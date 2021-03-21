@@ -23,9 +23,6 @@ jobs:
     - name: Install dependencies
       run: yarn
       
-    - name: Install adonis
-      run: npm i -g @adonisjs/cli
-      
     - name: Make envfile
       uses: SpicyPizza/create-envfile@v1
       with:
@@ -39,7 +36,7 @@ jobs:
         envkey_MAIL_PORT: ${{ secrets.MAIL_PORT }}
         envkey_MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         envkey_SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
-        envkey_APP_KEY: ${{ adonis key:generate }}
+        envkey_APP_KEY: ${{ secrets.APP_KEY }}
         
     - name: Run tests
       run: yarn test
