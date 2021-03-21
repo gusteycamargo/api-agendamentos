@@ -23,6 +23,7 @@ jobs:
     - name: Install dependencies
       run: yarn
    
+    - name: Run tests
       env:
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         DB_HOST: ${{ secrets.DB_HOST }}
@@ -35,6 +36,4 @@ jobs:
         MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         SESSION_DRIVER: ${{ secrets.SESSION_DRIVER }}
         APP_KEY: ${{ secrets.APP_KEY }}
-        
-    - name: Run tests
       run: yarn test
