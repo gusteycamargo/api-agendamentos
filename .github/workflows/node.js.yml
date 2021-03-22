@@ -9,6 +9,16 @@ jobs:
   run:
 
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - 33306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     strategy:
       matrix:
@@ -20,24 +30,17 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        
     - name: Install dependencies
       run: yarn
-      
-    - name: Give permission createEnvFile
-      run: chmod +x ./.github/createEnvFile.sh
 
-    - name: Give permission createEnvTestingFle
-      run: chmod +x ./.github/createEnvTestingFile.sh
+    - name: Install adonis
+      run: sudo npm i -g @adonisjs/cli
 
-    - name: Secrets to env
-      run: ./.github/createEnvFile.sh "$secrets"
-      env:
-       secrets: ${{ toJson(secrets) }}
-        
-    - name: Secrets to env testing
-      run: ./.github/createEnvTestingFile.sh "$secrets"
-      env:
-        secrets: ${{ toJson(secrets) }}
+    - name: Prepare Adonis Application
+      run: |
+        cp .env.ci .env
+        adonis key:generate
             
     - name: Run tests
       run: yarn test
