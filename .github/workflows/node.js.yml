@@ -10,37 +10,42 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
 
+    env:
+        DB_DATABASE: test
+        DB_USER: root
+        DB_PASSWORD: root
+
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
         
+    - name: Set up MySQL
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+        
+    - name: Install adonis and 
+      run: sudo npm i -g @adonisjs/cli
+      
+    - name: Install bodyparser
+      run: adonis install @adonisjs/bodyparser
+        
     - name: Install dependencies
       run: yarn
-
-    - name: Install adonis
-      run: sudo npm i -g @adonisjs/cli
 
     - name: Prepare Adonis Application
       run: |
         cp .env.ci .env
         adonis key:generate
+        cp .env .env.testing 
             
     - name: Run tests
       run: yarn test
