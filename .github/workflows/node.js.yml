@@ -10,28 +10,20 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_USER: root
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
 
-    env:
-        DB_DATABASE: test
-        DB_USER: root
-        DB_PASSWORD: root
-
     steps:
     - uses: actions/checkout@v2
+    
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql version: '5.7' # Optional, default value is "latest". The version of the MySQL
+        mysql database: 'test' # Optional, default value is "test". The specified database which will be create
+        mysql root password: ${{ secrets.DB_PASSWORD }} # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: ${{ secrets.DB_PASSWORD }} # Required if "mysql user" exists. The password for the "mysql user"
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
