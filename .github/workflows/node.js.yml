@@ -34,9 +34,6 @@ jobs:
         
     - name: Install adonis and 
       run: sudo npm i -g @adonisjs/cli
-      
-    - name: Install bodyparser
-      run: adonis install @adonisjs/bodyparser
         
     - name: Install dependencies
       run: yarn
