@@ -195,12 +195,17 @@ class ScheduleController {
 
             const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
             
-            await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
-              message
-                  .from('donotreplyagendamento@unespar.edu.br')
-                  .to(addressee.email)
-                  .subject('Edição de agendamento')
-            });
+            try {
+              Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+                message
+                    .from('donotreplyagendamento@unespar.edu.br')
+                    .to(addressee.email)
+                    .subject('Edição de agendamento')
+              });
+            }
+            catch(error) {
+              console.log(error)
+            }
     
             return schedule;
           }
@@ -216,12 +221,17 @@ class ScheduleController {
         
         const { user, place, course, category, equipamentsName, date, addressee } = await retrieveDataToEmailConfirmation(equipaments, schedule);
 
-        await Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
-          message
-              .from('donotreplyagendamento@unespar.edu.br')
-              .to(addressee.email)
-              .subject('Edição de agendamento')
-        });
+        try {
+          Mail.send('emails.confirmationSchedule', { schedule, date, user, equipamentsName, place, course, category }, (message) => {
+            message
+                .from('donotreplyagendamento@unespar.edu.br')
+                .to(addressee.email)
+                .subject('Edição de agendamento')
+          });
+        }
+        catch(error) {
+          console.log(error)
+        }
 
         return schedule;
       }
